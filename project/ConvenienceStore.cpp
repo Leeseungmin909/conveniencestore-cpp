@@ -37,8 +37,6 @@ void ConvenienceStore::loadInventory() {
         string line = ss.str();
         vecsalesHistory.push_back(line);
     }
-    //cout << "vecsalesHistory.size() = " << vecsalesHistory.size() << endl;
-
 }
 
 void ConvenienceStore::saveInventory() {
@@ -49,8 +47,8 @@ void ConvenienceStore::saveInventory() {
     }
     for (Product& item : inventory) {
         fout << item.getName() << " "
-            << item.getQuantity() << " "
-            << item.getPrice() << endl;
+             << item.getQuantity() << " "
+             << item.getPrice() << endl;
     }
     fout.close();
 }
@@ -60,26 +58,24 @@ bool ConvenienceStore::sellProduct(const string& ItemName) {
         if (item.getName() == ItemName) {
             if (item.getQuantity() > 0) {
                 cout << "구매하실 갯수:";
-                int i;
-                cin >> i;
-                cin.ignore();
-                setCount(i);
+                cin >> count;
 
-                if (i <= 0) {
+                if (count <= 0) {
                     cout << "0 이하의 값은 들어올 수 없습니다." << endl;
                     return false;
                 }
 
-                if (i > item.getQuantity()) {
+                if (count > item.getQuantity()) {
                     cout << ItemName << " 재고가 부족합니다" << endl;
                     return false;
                 }
 
-                item.setQuantity(item.getQuantity() - getCount());
+                item.setQuantity(item.getQuantity() - count);
                 saveInventory();
                 cout << ItemName << " 판매 완료 , 남은 수량: " << item.getQuantity() << endl;
-                setTotalPay(item.getPrice()*getCount());
+                totalPay = (item.getPrice() * count);
                 loadInventory();
+                cin.get();
                 return true;
 
             }
@@ -93,27 +89,16 @@ bool ConvenienceStore::sellProduct(const string& ItemName) {
     return false;
 }
 
-void ConvenienceStore::displayInventory() {
-    cout << "=== 현재 재고 ===" << endl;
-    for (Product& item : inventory) {
-        cout << "상품명: " << item.getName()
-            << "/수량: " << item.getQuantity()
-            << "/가격: " << item.getPrice() << "원" << endl;
-    }
-}
-
 bool ConvenienceStore::login(string pass) {
-    if (getCorrectPass() == pass) {
+    if (correctPass == pass) {
         return true;
     }
     else {
-        cout << "로그인 fail" << endl;
+        cin.get();
+        cout << "로그인 fail" << endl; 
+        cin.get();
         return false;
     }
-}
-
-string ConvenienceStore::getCorrectPass() {
-    return correctPass;
 }
 
 void ConvenienceStore::refundFunction(const int& Index) {
@@ -125,7 +110,6 @@ void ConvenienceStore::refundFunction(const int& Index) {
         fout << line << endl;
     }
     fout.close();
-    //cout << "@test refundData:" << refundData << endl; // 지워야함
     cin.get();
 
     vector<string> tokens;
@@ -135,8 +119,6 @@ void ConvenienceStore::refundFunction(const int& Index) {
     while (getline(iss, buf, delemiter)) {
         tokens.push_back(buf);
     }
-    //cout << tokens[0] << endl; // item 이름
-    //cout << tokens[1] << endl; // tokens[1] 의 값이 수량의 갯수이다.    
 
     int newQuantity = 0;
 
@@ -155,24 +137,12 @@ void ConvenienceStore::refundFunction(const int& Index) {
     loadInventory();
 }
 
-
-int ConvenienceStore::getCount() {
-    return count;
-}
-void ConvenienceStore::setCount(int i) {
-    this->count = i;
-}
-int ConvenienceStore::getTotalPay() {
-    return totalPay;
-}
-void ConvenienceStore::setTotalPay(int i) {
-    this->totalPay = i;
-}
-
 void ConvenienceStore::addProductFunction(const string& ItemName){    
     for (Product& item : inventory) {
         if (item.getName() == ItemName) {
             cout << "이미 존재하는 상품입니다." << endl;
+            cin.get();
+            cin.get();
             return;
         }
     }
@@ -184,7 +154,8 @@ void ConvenienceStore::addProductFunction(const string& ItemName){
     inventory.push_back(Product(ItemName, quantity, price));
     saveInventory();
     cout << "상품이 추가되었습니다." << endl;
-    
+    cin.get();
+    cin.get();
 }
 
 void ConvenienceStore::deleteProductFunction(const string& ItemName) {
@@ -194,6 +165,8 @@ void ConvenienceStore::deleteProductFunction(const string& ItemName) {
             it = inventory.erase(it);
             saveInventory();
             cout << "상품이 삭제되었습니다." << endl;
+            cin.get();
+            cin.get();
             return;
         }
         else {
@@ -201,6 +174,8 @@ void ConvenienceStore::deleteProductFunction(const string& ItemName) {
         }
     }
     cout << "상품을 찾을 수 없습니다." << endl;
+    cin.get();
+    cin.get();
 }
 
 void ConvenienceStore::updateProductFunction(const string& ItemName){
@@ -212,8 +187,12 @@ void ConvenienceStore::updateProductFunction(const string& ItemName){
             item.setQuantity(newQuantity);
             saveInventory(); 
             cout << "수량이 변경되었습니다." << endl;
+            cin.get();
+            cin.get();
             return;
         }
     }
     cout << "상품을 찾을 수 없습니다." << endl;
+    cin.get();
+    cin.get();
 }

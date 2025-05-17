@@ -14,8 +14,6 @@ private:
     void loadInventory();
     void saveInventory();
     string correctPass = "20203188";
-    int count = 0;  
-    int totalPay = 0;
 protected:
     string filename = "inventory.txt";
     string hilename = "salesHistory.txt";
@@ -23,13 +21,9 @@ protected:
     vector<string> vecsalesHistory;
 public:
     ConvenienceStore();
-    int getCount();
-    void setCount(int i);
-    int getTotalPay();
-    void setTotalPay(int i);
-    string getCorrectPass();
+    int count = 0;
+    int totalPay = 0;
     bool sellProduct(const string& ItemName);
-    void displayInventory();
     bool login(string pass);
     void refundFunction(const int& Index);
     void addProductFunction(const string& ItemName);

@@ -19,6 +19,6 @@ int Product::getPrice() {
 	return ItemPrice;
 }
 
-void Product::setQuantity(int Quantity) {
-	ItemQuantity = Quantity;
+void Product::setQuantity(int quantity) {
+	ItemQuantity = quantity;
 }

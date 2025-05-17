@@ -16,7 +16,7 @@ public:
     const string& getName();
     int getQuantity();
     int getPrice();
-    void setQuantity(int q);
+    void setQuantity(int quantity);
 };
 
 #endif // !PRODUCT_H
